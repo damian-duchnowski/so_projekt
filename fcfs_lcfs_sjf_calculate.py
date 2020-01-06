@@ -1,7 +1,7 @@
 from statistics import mean
 
 
-def calculate_avereage_waiting_time(data):
+def calculate_average_waiting_time(data):
     # Tablica, w ktorej zapisuje sredni czas oczekiwania procesow dla kazdego ciagu (seq)
     avg_waiting_times = []
 
