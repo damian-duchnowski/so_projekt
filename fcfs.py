@@ -1,5 +1,5 @@
 from parse_data import parse
-from fcfs_lcfs_sjf_calculate import *
+from fcfs_lcfs_sjf_calculate import calculate_average_waiting_time, calculate_average_turnaround_time
 
 
 def output():

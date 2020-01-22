@@ -7,7 +7,7 @@ def calculate_average_waiting_time(data):
 
     for seq in data:
         waiting_times_in_current_seq = []
-        for idx, process in enumerate(seq):
+        for idx in range(len(seq)):
             waiting_times_in_current_seq.append(sum(seq[:idx]))
         avg_waiting_times.append(mean(waiting_times_in_current_seq))
 

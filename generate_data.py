@@ -3,7 +3,7 @@ from random import randint
 
 def generate():
     with open('input.txt', 'w') as f:
-        for line in range(3):
+        for _ in range(3):
             burst_times = []
             for burst in range(3):
                 burst_times.append(randint(1, 20))
