@@ -1,4 +1,8 @@
 def parse():
+    '''
+    Funkcja wczytujaca dane z pliku.
+    '''
+    # Tablica, w ktorej przechowuje odczytane dane w postaci listy ciagow procesow (lista list dok)
     parsed_data = []
     with open('input.txt', 'r') as f:
         lines = f.readlines()
