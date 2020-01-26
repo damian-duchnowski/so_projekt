@@ -1,5 +1,5 @@
 from statistics import mean
-from parse_data import parse  # USUN TO!
+from math import ceil
 
 
 def count_non_zero_elements(seq):
@@ -32,20 +32,51 @@ def roll_q(q, waiting_times_in_current_seq, current_idx, locked_idx):
             waiting_times_in_current_seq[wait_idx] += q
 
 
+def count_q_needed(data, q):
+    '''
+    Funkcja obliczajaca ile kazdy proces potrzebuje kwantow, aby wykonac sie w calosci.
+    '''
+    q_needed_for_completion = []
+    for seq in data:
+        q_needed_for_completion_in_current_seq = []
+        for process in seq:
+            q_needed_for_completion_in_current_seq.append(ceil(process/q))
+        q_needed_for_completion.append(q_needed_for_completion_in_current_seq)
+    return q_needed_for_completion
+
+
+def get_traversals(data, q):
+    '''
+    Funkcja zwracaja "diagramy Gantta" dla kazdego ciagu w zbiorze danych.
+    '''
+    q_needed_for_completion = count_q_needed(data, q)
+    traversals = []
+    for seq_idx, seq in enumerate(data):
+        traversal_for_current_seq = []
+        while any(q_needed_for_completion[seq_idx]) != 0:
+            for process_idx in range(len(seq)):
+                if q_needed_for_completion[seq_idx][process_idx] != 0:
+                    traversal_for_current_seq.append(process_idx)
+                    q_needed_for_completion[seq_idx][process_idx] -= 1
+        traversals.append(traversal_for_current_seq)
+    return traversals
+
+
 def calculate_average_waiting_time(data, q):
+    '''
+    Funkcja obliczajaca sredni czas oczekiwania procesow ze wszystkich ciagow w podanych do niej danych.
+    '''
     # Tablica, w ktorej zapisuje sredni czas oczekiwania procesow dla kazdego ciagu (seq)
     avg_waiting_times = []
 
-    # Tablica przechowujaca "diagramy Gantta" na potrzebny funkcji obliczajacej sredni czas przetwarzania
-    traversals = []
+    # Tablica, w ktorej przechowuje czasy oczekiwania procesow dla kazdego ciagu
+    waiting_times_for_each_seq = []
 
     for seq in data:
         # Tablica, w ktorej zapisuje czas oczekiwania dla kazdego z procesow w aktualnym ciagu
         waiting_times_in_current_seq = [0]*len(seq)
         # Tablica indeksow procesow juz zakonczonych
         locked_idx = []
-        # Tablica zapisujaca "diagram Gantta" dla danego ciagu
-        traversal = []
 
         # Petla wykonuje sie dopoki wszystkie procesy sie nie skoncza
         while any(seq) != 0:
@@ -56,18 +87,25 @@ def calculate_average_waiting_time(data, q):
                     process = 0
                     seq[idx] = process
                     locked_idx.append(idx)
-                    traversal.append(idx)
                     roll_q(q, waiting_times_in_current_seq, idx, locked_idx)
                 if process > 0:
                     process -= q
                     seq[idx] = process
-                    traversal.append(idx)
                     roll_q(q, waiting_times_in_current_seq, idx, locked_idx)
-        print("Traversal: " + str(traversal))  # DEBUG!
-        print("Waiting times: " + str(waiting_times_in_current_seq))  # DEBUG!
         avg_waiting_times.append(mean(waiting_times_in_current_seq))
-        traversals.append(traversal)
-    return mean(avg_waiting_times), traversals
+        waiting_times_for_each_seq.append(waiting_times_in_current_seq)
+    return mean(avg_waiting_times), waiting_times_for_each_seq
 
 
-print(calculate_average_waiting_time(parse(), 1)[0])
+def calculate_average_turnaround_time(data, q, traversals, waiting_times):
+    avg_turnaround_times = []
+
+    for seq_idx, seq in enumerate(data):
+        turnaround_times_in_current_seq = []
+
+        for process_idx, process in enumerate(seq):
+            turnaround_times_in_current_seq.append(
+                waiting_times[seq_idx][process_idx]+process)
+        avg_turnaround_times.append(mean(turnaround_times_in_current_seq))
+        print(turnaround_times_in_current_seq)
+    return mean(avg_turnaround_times)
