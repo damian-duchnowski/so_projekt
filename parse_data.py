@@ -2,7 +2,7 @@ def parse(file_name):
     '''
     Funkcja wczytujaca dane z pliku.
     '''
-    # Tablica, w ktorej przechowuje odczytane dane w postaci listy ciagow procesow (lista list dok)
+    # Tablica, w ktorej przechowuje odczytane dane w postaci listy ciagow procesow (lista list dokładniej)
     parsed_data = []
     with open(file_name, 'r') as f:
         lines = f.readlines()

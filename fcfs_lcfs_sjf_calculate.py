@@ -3,7 +3,7 @@ from statistics import mean
 
 def calculate_average_waiting_time(data):
     '''
-    Funkcja obliczajaca sredni czas oczekiwania ze wszystkich ciagow w podanych do niej danych.
+    Funkcja obliczajaca sredni czas oczekiwania procesow ze wszystkich ciagow w podanych do niej danych.
     '''
     # Tablica, w ktorej zapisuje sredni czas oczekiwania procesow dla kazdego ciagu (seq)
     avg_waiting_times = []
@@ -20,7 +20,7 @@ def calculate_average_waiting_time(data):
 
 def calculate_average_turnaround_time(data):
     '''
-    Funkcja obliczajaca sredni czas przetwarzania ze wszystkich ciagow w podanych do niej danych.
+    Funkcja obliczajaca sredni czas przetwarzania procesow ze wszystkich ciagow w podanych do niej danych.
     '''
     # Tablica, w ktorej zapisuje sredni czas cyklu przetwarzania dla kazdego ciagu (seq)
     avg_turnaround_times = []

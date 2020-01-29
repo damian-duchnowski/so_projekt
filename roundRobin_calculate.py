@@ -45,26 +45,10 @@ def count_q_needed(data, q):
     return q_needed_for_completion
 
 
-def get_traversals(data, q):
-    '''
-    Funkcja zwracaja "diagramy Gantta" dla kazdego ciagu w zbiorze danych.
-    '''
-    q_needed_for_completion = count_q_needed(data, q)
-    traversals = []
-    for seq_idx, seq in enumerate(data):
-        traversal_for_current_seq = []
-        while any(q_needed_for_completion[seq_idx]) != 0:
-            for process_idx in range(len(seq)):
-                if q_needed_for_completion[seq_idx][process_idx] != 0:
-                    traversal_for_current_seq.append(process_idx)
-                    q_needed_for_completion[seq_idx][process_idx] -= 1
-        traversals.append(traversal_for_current_seq)
-    return traversals
-
-
 def calculate_average_waiting_time(data, q):
     '''
-    Funkcja obliczajaca sredni czas oczekiwania procesow ze wszystkich ciagow w podanych do niej danych.
+    Funkcja obliczajaca sredni czas oczekiwania procesow ze wszystkich ciagow w podanych do niej danych. 
+    Zwraca rowniez listę czasów oczekiwania dla kazdego ciagu na potrzeby funkcji liczacej sredni czas cyklu przetwarzania.
     '''
     # Tablica, w ktorej zapisuje sredni czas oczekiwania procesow dla kazdego ciagu (seq)
     avg_waiting_times = []
@@ -97,7 +81,11 @@ def calculate_average_waiting_time(data, q):
     return mean(avg_waiting_times), waiting_times_for_each_seq
 
 
-def calculate_average_turnaround_time(data, q, traversals, waiting_times):
+def calculate_average_turnaround_time(data, q, waiting_times):
+    '''
+    Funkcja obliczajaca sredni czas przetwarzania procesow ze wszystkich ciagow w podanych do niej danych.
+    '''
+    # Tablica, w ktorej zapisuje sredni czas cyklu przetwarzania dla kazdego ciagu (seq)
     avg_turnaround_times = []
 
     for seq_idx, seq in enumerate(data):
@@ -107,5 +95,4 @@ def calculate_average_turnaround_time(data, q, traversals, waiting_times):
             turnaround_times_in_current_seq.append(
                 waiting_times[seq_idx][process_idx]+process)
         avg_turnaround_times.append(mean(turnaround_times_in_current_seq))
-        print(turnaround_times_in_current_seq)
     return mean(avg_turnaround_times)
